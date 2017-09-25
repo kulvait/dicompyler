@@ -1,5 +1,12 @@
-dicompyler
+dicompyler (fork)
 ============
+I am Debian maintainer of the package dicompyler and its current state in this linux distribution is not optimal. Last commit e9d2a3f to the upstream repository from 2015. This package have major dificulties with its dependencies. That make it at least in Debian unfunctional and I think the same situation apply to pip downloaded package. Another problem is that the code from https://github.com/dicompyler/dicompyler-core is not in sync with dicompyler codebase.
+
+I would like to create release that use Python 2, is compatible with wxpython 3.0 and with dicomparser v0.9.9.
+
+I would like to integrate codebase from https://github.com/dicompyler/dicompyler-core, from dependencyupdate branch, from my own work on Debian patches and from the work of other developers that recently made changes to dicompyler code, namely https://github.com/pijaginw/dicompyler/tree/fix-dicompyler-on-ubuntu.
+
+Since current upstream developer, bastula, is unresponsive about the topic, I offer this repository as the place where this work could be done.
 
 <img src='https://raw.githubusercontent.com/wiki/bastula/dicompyler/images/0.3/2dview_mac_thumb.png' align='right' height='240' width='287' alt="dicompyler screenshot">
 dicompyler is an extensible open source radiation therapy research platform based on the DICOM standard. It also functions as a cross-platform DICOM RT viewer.
