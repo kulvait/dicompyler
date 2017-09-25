@@ -2,9 +2,9 @@ dicompyler (fork)
 ============
 I am Debian maintainer of the package dicompyler and its current state in this linux distribution is not optimal. Last commit e9d2a3f to the upstream repository from 2015. This package have major dificulties with its dependencies. That make it at least in Debian unfunctional and I think the same situation apply to pip downloaded package. Another problem is that the code from https://github.com/dicompyler/dicompyler-core is not in sync with dicompyler codebase.
 
-I would like to create release that use Python 2, is compatible with wxpython 3.0 and with dicomparser v0.9.9.
+I would like to create release that use Python 2, is compatible with wxpython 3.0 and with pydicom v0.9.9.
 
-I would like to integrate codebase from https://github.com/dicompyler/dicompyler-core, from dependencyupdate branch, from my own work on Debian patches and from the work of other developers that recently made changes to dicompyler code, namely https://github.com/pijaginw/dicompyler/tree/fix-dicompyler-on-ubuntu.
+I would like to integrate codebase from https://github.com/dicompyler/dicompyler-core, from dicompyler dependencyupdate branch, from my own work on Debian patches and from the work of other developers that recently made changes to dicompyler code, namely https://github.com/pijaginw/dicompyler/tree/fix-dicompyler-on-ubuntu. And I would like to create release 0.5
 
 Since current upstream developer, bastula, is unresponsive about the topic, I offer this repository as the place where this work could be done.
 
