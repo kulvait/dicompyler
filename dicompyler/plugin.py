@@ -11,8 +11,9 @@ import logging
 logger = logging.getLogger('dicompyler.plugin')
 import imp, os
 import wx
-from wx.xrc import *
-from wx.lib.pubsub import Publisher as pub
+from wx.xrc import XRCCTRL, XRCID, XmlResource
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 from dicompyler import guiutil, util
 
 def import_plugins(userpath=None):

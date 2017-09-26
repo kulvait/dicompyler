@@ -1,0 +1,14 @@
+do_not_download_distribute.patch
+wxpy30.patch
+wxpy30-more.patch
+enable_pydicom_0.9.8.patch
+allow_pillow_instead_of_pil.patch
+enable_later_versions_of_matplotlib.patch
+fix-xrc-errors.patch
+fix_DicomImporterDialog.patch
+092017A_fixpubsub.patch
+092017B_fiximportasterixs.patch
+092017C_fixwx30.patch
+092017E_newwxmpl.patch
+092017F_pillowtostringtobytes.patch
+092017G_fixdicomparser.patch

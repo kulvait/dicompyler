@@ -1,0 +1,245 @@
+Author: Vojtěch Kulvait <kulvait@gmail.com>
+Last-Update: Mon Sep 18 10:00:00 CEST 2017
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=854837
+Description: wx.lib.pubsub fix according to https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+
+Index: dicompyler/dicompyler/baseplugins/2dview.py
+===================================================================
+--- dicompyler.orig/dicompyler/baseplugins/2dview.py
++++ dicompyler/dicompyler/baseplugins/2dview.py
+@@ -10,9 +10,8 @@
+ 
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ from matplotlib import _cntr as cntr
+ from matplotlib import __version__ as mplversion
+ import numpy as np
+@@ -194,18 +193,18 @@ class plugin2DView(wx.Panel):
+         self.Unbind(wx.EVT_RIGHT_DOWN)
+         self.Unbind(wx.EVT_RIGHT_UP)
+         self.Unbind(wx.EVT_MOTION)
+-        pub.unsubscribe(self.OnKeyDown)
+-        pub.unsubscribe(self.OnMouseWheel)
+-        pub.unsubscribe(self.OnRefresh)
++        pub.unsubscribe(self.OnKeyDown, 'main.key_down')
++        pub.unsubscribe(self.OnMouseWheel, 'main.mousewheel')
++        pub.unsubscribe(self.OnRefresh, '2dview.refresh')
+ 
+     def OnDestroy(self, evt):
+         """Unbind to all events before the plugin is destroyed."""
+ 
+-        pub.unsubscribe(self.OnUpdatePatient)
+-        pub.unsubscribe(self.OnStructureCheck)
+-        pub.unsubscribe(self.OnIsodoseCheck)
+-        pub.unsubscribe(self.OnDrawingPrefsChange)
+-        pub.unsubscribe(self.OnPluginLoaded)
++        pub.unsubscribe(self.OnUpdatePatient, 'patient.updated.parsed_data')
++        pub.unsubscribe(self.OnStructureCheck, 'structures.checked')
++        pub.unsubscribe(self.OnIsodoseCheck, 'isodoses.checked')
++        pub.unsubscribe(self.OnDrawingPrefsChange, '2dview.drawingprefs')
++        pub.unsubscribe(self.OnPluginLoaded, 'plugin.loaded.2dview')
+         self.OnUnfocus()
+ 
+     def OnStructureCheck(self, msg):
+@@ -725,4 +724,4 @@ class plugin2DView(wx.Panel):
+             menu.Append(id, "No tools found")
+             menu.Enable(id, False)
+         self.PopupMenu(menu)
+-        menu.Destroy()
+\ No newline at end of file
++        menu.Destroy()
+Index: dicompyler/dicompyler/baseplugins/anonymize.py
+===================================================================
+--- dicompyler.orig/dicompyler/baseplugins/anonymize.py
++++ dicompyler/dicompyler/baseplugins/anonymize.py
+@@ -10,9 +10,8 @@
+ 
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ import os, threading
+ from dicompyler import guiutil, util
+ 
+@@ -333,4 +332,9 @@ class AnonymizeDialog(wx.Dialog):
+         else:
+             self.privatetags = False
+ 
+-        self.EndModal(wx.ID_OK)
+\ No newline at end of file
++        self.EndModal(wx.ID_OK)
++
++    def OnDestroy(self, evt):
++        """Unbind to all events before the plugin is destroyed."""
++        pub.unsubscribe(self.OnImportPrefsChange, 'general.dicom.import_location')
++        pub.unsubscribe(self.OnUpdatePatient, 'patient.updated.raw_data')
+Index: dicompyler/dicompyler/baseplugins/dvh.py
+===================================================================
+--- dicompyler.orig/dicompyler/baseplugins/dvh.py
++++ dicompyler/dicompyler/baseplugins/dvh.py
+@@ -12,9 +12,8 @@
+ 
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ from dicompyler import guiutil, util
+ from dicompyler import dvhdata, guidvh
+ from dicompyler import wxmpl
+@@ -134,9 +133,9 @@ class pluginDVH(wx.Panel):
+     def OnDestroy(self, evt):
+         """Unbind to all events before the plugin is destroyed."""
+ 
+-        pub.unsubscribe(self.OnUpdatePatient)
+-        pub.unsubscribe(self.OnStructureCheck)
+-        pub.unsubscribe(self.OnStructureSelect)
++        pub.unsubscribe(self.OnUpdatePatient, 'patient.updated.parsed_data')
++        pub.unsubscribe(self.OnStructureCheck, 'structures.checked')
++        pub.unsubscribe(self.OnStructureSelect, 'structure.selected')
+ 
+     def OnStructureCheck(self, msg):
+         """When a structure changes, update the interface and plot."""
+Index: dicompyler/dicompyler/baseplugins/quickopen.py
+===================================================================
+--- dicompyler.orig/dicompyler/baseplugins/quickopen.py
++++ dicompyler/dicompyler/baseplugins/quickopen.py
+@@ -11,9 +11,8 @@
+ import logging
+ logger = logging.getLogger('dicompyler.quickimport')
+ import wx
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ from dicompyler import dicomparser, util
+ import dicom
+ 
+Index: dicompyler/dicompyler/baseplugins/treeview.py
+===================================================================
+--- dicompyler.orig/dicompyler/baseplugins/treeview.py
++++ dicompyler/dicompyler/baseplugins/treeview.py
+@@ -13,9 +13,8 @@ logger = logging.getLogger('dicompyler.t
+ import threading, Queue
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ from wx.gizmos import TreeListCtrl as tlc
+ from dicompyler import guiutil, util
+ import dicom
+@@ -99,7 +98,7 @@ class pluginTreeView(wx.Panel):
+     def OnDestroy(self, evt):
+         """Unbind to all events before the plugin is destroyed."""
+ 
+-        pub.unsubscribe(self.OnUpdatePatient)
++        pub.unsubscribe(self.OnUpdatePatient, 'patient.updated.raw_data')
+ 
+     def OnLoadTree(self, event):
+         """Update and load the DICOM tree."""
+Index: dicompyler/dicompyler/dicomgui.py
+===================================================================
+--- dicompyler.orig/dicompyler/dicomgui.py
++++ dicompyler/dicompyler/dicomgui.py
+@@ -15,9 +15,8 @@ logger = logging.getLogger('dicompyler.d
+ import hashlib, os, threading
+ import wx
+ from wx.xrc import *
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ import numpy as np
+ from dicompyler import dicomparser, dvhdoses, guiutil, util
+ 
+Index: dicompyler/dicompyler/guiutil.py
+===================================================================
+--- dicompyler.orig/dicompyler/guiutil.py
++++ dicompyler/dicompyler/guiutil.py
+@@ -10,9 +10,8 @@
+ import util
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ 
+ def IsMSWindows():
+     """Are we running on Windows?
+Index: dicompyler/dicompyler/main.py
+===================================================================
+--- dicompyler.orig/dicompyler/main.py
++++ dicompyler/dicompyler/main.py
+@@ -20,9 +20,8 @@ from wx.xrc import *
+ import wx.lib.dialogs, webbrowser
+ # Uncomment line to setup pubsub for frozen targets on wxPython 2.8.11 and above
+ # from wx.lib.pubsub import setupv1
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ from dicompyler import guiutil, util
+ from dicompyler import dicomgui, dvhdata, dvhdoses, dvhcalc
+ from dicompyler.dicomparser import DicomParser as dp
+Index: dicompyler/dicompyler/plugin.py
+===================================================================
+--- dicompyler.orig/dicompyler/plugin.py
++++ dicompyler/dicompyler/plugin.py
+@@ -12,9 +12,8 @@ logger = logging.getLogger('dicompyler.p
+ import imp, os
+ import wx
+ from wx.xrc import *
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ from dicompyler import guiutil, util
+ 
+ def import_plugins(userpath=None):
+Index: dicompyler/dicompyler/preferences.py
+===================================================================
+--- dicompyler.orig/dicompyler/preferences.py
++++ dicompyler/dicompyler/preferences.py
+@@ -10,9 +10,8 @@
+ import os
+ import wx
+ from wx.xrc import *
+-import wx.lib.pubsub.setuparg1
+-import wx.lib.pubsub.core
+-pub = wx.lib.pubsub.core.Publisher()
++from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++from wx.lib.pubsub import pub
+ from dicompyler import guiutil, util
+ 
+ try:
+@@ -376,9 +375,8 @@ def main():
+ 
+     import tempfile, os
+     import wx
+-    import wx.lib.pubsub.setuparg1
+-    import wx.lib.pubsub.core
+-    pub = wx.lib.pubsub.core.Publisher()
++    from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
++    from wx.lib.pubsub import pub
+ 
+     app = wx.App(False)
+ 

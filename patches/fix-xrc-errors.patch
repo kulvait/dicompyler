@@ -1,0 +1,25 @@
+Description: Fix XRC errors reported by wxPython 3.0
+Author: Olly Betts <olly@survex.com>
+Bug-Debian: https://bugs.debian.org/759056
+Forwarded: no
+Last-Update: 2014-09-11
+
+--- dicompyler-0.4.2.orig/dicompyler/resources/main.xrc
++++ dicompyler-0.4.2/dicompyler/resources/main.xrc
+@@ -154,7 +154,6 @@
+                     </object>
+                   </object>
+                   <cols>3</cols>
+-                  <rows>1</rows>
+                   <vgap>5</vgap>
+                   <hgap>5</hgap>
+                   <growablecols>1</growablecols>
+@@ -222,7 +221,7 @@
+                     <option>1</option>
+                     <flag>wxALL|wxEXPAND|wxALIGN_CENTRE</flag>
+                   </object>
+-                  <cols>4</cols>
++                  <cols>8</cols>
+                   <rows>2</rows>
+                   <vgap>5</vgap>
+                   <hgap>5</hgap>

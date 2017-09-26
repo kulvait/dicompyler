@@ -1,0 +1,16 @@
+Author: Vojtech Kulvait <kulvait@gmail.com>
+Last-Update: Tue, 14 Feb 2017 14:18:44 +0100
+Bug-Debian: https://bugs.debian.org/854837
+Description: Fix Open Patient dialog
+
+--- a/dicompyler/dicomgui.py
++++ b/dicompyler/dicomgui.py
+@@ -50,6 +50,8 @@ class DicomImporterDialog(wx.Dialog):
+         pre = wx.PreDialog()
+         # the Create step is done by XRC.
+         self.PostCreate(pre)
++        self.path = "/tmp"
++        self.import_location_setting = "Remember Last Used"
+ 
+     def Init(self, res):
+         """Method called after the panel has been initialized."""

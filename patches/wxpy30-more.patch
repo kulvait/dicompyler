@@ -1,0 +1,147 @@
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Sat, 06 Sep 2014 15:57:29 +0200
+Bug-Debian: http://bugs.debian.org/759056
+Description: Further patches not applied by wx-migration-tool from
+ http://anonscm.debian.org/cgit/collab-maint/wx-migration-tools.git
+
+--- a/dicompyler/baseplugins/anonymize.py
++++ b/dicompyler/baseplugins/anonymize.py
+@@ -10,7 +10,9 @@
+ 
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ import os, threading
+ from dicompyler import guiutil, util
+ 
+--- a/dicompyler/baseplugins/treeview.py
++++ b/dicompyler/baseplugins/treeview.py
+@@ -13,7 +13,9 @@ logger = logging.getLogger('dicompyler.t
+ import threading, Queue
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ from wx.gizmos import TreeListCtrl as tlc
+ from dicompyler import guiutil, util
+ import dicom
+--- a/dicompyler/plugin.py
++++ b/dicompyler/plugin.py
+@@ -12,7 +12,9 @@ logger = logging.getLogger('dicompyler.p
+ import imp, os
+ import wx
+ from wx.xrc import *
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ from dicompyler import guiutil, util
+ 
+ def import_plugins(userpath=None):
+--- a/dicompyler/baseplugins/quickopen.py
++++ b/dicompyler/baseplugins/quickopen.py
+@@ -11,7 +11,9 @@
+ import logging
+ logger = logging.getLogger('dicompyler.quickimport')
+ import wx
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ from dicompyler import dicomparser, util
+ import dicom
+ 
+--- a/dicompyler/baseplugins/2dview.py
++++ b/dicompyler/baseplugins/2dview.py
+@@ -10,7 +10,9 @@
+ 
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ from matplotlib import _cntr as cntr
+ from matplotlib import __version__ as mplversion
+ import numpy as np
+--- a/dicompyler/baseplugins/dvh.py
++++ b/dicompyler/baseplugins/dvh.py
+@@ -12,7 +12,9 @@
+ 
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ from dicompyler import guiutil, util
+ from dicompyler import dvhdata, guidvh
+ from dicompyler import wxmpl
+--- a/dicompyler/dicomgui.py
++++ b/dicompyler/dicomgui.py
+@@ -15,7 +15,9 @@ logger = logging.getLogger('dicompyler.d
+ import hashlib, os, threading
+ import wx
+ from wx.xrc import *
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ import numpy as np
+ from dicompyler import dicomparser, dvhdoses, guiutil, util
+ 
+--- a/dicompyler/guiutil.py
++++ b/dicompyler/guiutil.py
+@@ -10,7 +10,9 @@
+ import util
+ import wx
+ from wx.xrc import XmlResource, XRCCTRL, XRCID
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ 
+ def IsMSWindows():
+     """Are we running on Windows?
+--- a/dicompyler/main.py
++++ b/dicompyler/main.py
+@@ -20,7 +20,9 @@ from wx.xrc import *
+ import wx.lib.dialogs, webbrowser
+ # Uncomment line to setup pubsub for frozen targets on wxPython 2.8.11 and above
+ # from wx.lib.pubsub import setupv1
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ from dicompyler import guiutil, util
+ from dicompyler import dicomgui, dvhdata, dvhdoses, dvhcalc
+ from dicompyler.dicomparser import DicomParser as dp
+--- a/dicompyler/preferences.py
++++ b/dicompyler/preferences.py
+@@ -10,7 +10,9 @@
+ import os
+ import wx
+ from wx.xrc import *
+-from wx.lib.pubsub import Publisher as pub
++import wx.lib.pubsub.setuparg1
++import wx.lib.pubsub.core
++pub = wx.lib.pubsub.core.Publisher()
+ from dicompyler import guiutil, util
+ 
+ try:
+@@ -374,7 +374,9 @@ def main():
+ 
+     import tempfile, os
+     import wx
+-    from wx.lib.pubsub import Publisher as pub
++    import wx.lib.pubsub.setuparg1
++    import wx.lib.pubsub.core
++    pub = wx.lib.pubsub.core.Publisher()
+ 
+     app = wx.App(False)
+ 

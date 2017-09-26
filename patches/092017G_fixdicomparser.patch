@@ -1,0 +1,47 @@
+Author: Vojtěch Kulvait <kulvait@gmail.com>
+Last-Update: Tue Sep 19 14:51:01 CEST 2017
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=854837
+Description: dicomparser.py:GetStudyInfo was replaced by the new version from dicompyler-core commit 13e5265
+
+Index: dicompyler/dicompyler/dicomparser.py
+===================================================================
+--- dicompyler.orig/dicompyler/dicomparser.py
++++ dicompyler/dicompyler/dicomparser.py
+@@ -64,19 +64,25 @@ class DicomParser:
+         return self.ds.SOPInstanceUID
+ 
+     def GetStudyInfo(self):
+-        """Return the study information of the current file."""
++        """Return the study information of the current file. Function from dicompyler-core commit 13e5265"""
+ 
+         study = {}
+         if 'StudyDescription' in self.ds:
+-            desc=self.ds.StudyDescription
++            desc = self.ds.StudyDescription
+         else:
+-            desc='No description'
++            desc = 'No description'
+         study['description'] = desc
++        if 'StudyDate' in self.ds:
++            date = self.ds.StudyDate
++        else:
++            date = None
++        study['date'] = date
+         # Don't assume that every dataset includes a study UID
+-        study['id'] = self.ds.SeriesInstanceUID
+         if 'StudyInstanceUID' in self.ds:
+             study['id'] = self.ds.StudyInstanceUID
+-        
++        else:
++            study['id'] = str(random.randint(0, 65535))
++
+         return study
+ 
+     def GetSeriesInfo(self):
+@@ -690,4 +696,4 @@ class DicomParser:
+                     if "BeamDose" in b:
+                         beams[b.ReferencedBeamNumber]['dose'] = \
+                             b.BeamDose * nfx * 100
+-        return beams
+\ No newline at end of file
++        return beams

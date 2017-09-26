@@ -13,7 +13,8 @@ logger = logging.getLogger('dicompyler.treeview')
 import threading, Queue
 import wx
 from wx.xrc import XmlResource, XRCCTRL, XRCID
-from wx.lib.pubsub import Publisher as pub
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 from wx.gizmos import TreeListCtrl as tlc
 from dicompyler import guiutil, util
 import dicom
@@ -97,7 +98,7 @@ class pluginTreeView(wx.Panel):
     def OnDestroy(self, evt):
         """Unbind to all events before the plugin is destroyed."""
 
-        pub.unsubscribe(self.OnUpdatePatient)
+        pub.unsubscribe(self.OnUpdatePatient, 'patient.updated.raw_data')
 
     def OnLoadTree(self, event):
         """Update and load the DICOM tree."""

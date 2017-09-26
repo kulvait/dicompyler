@@ -1,0 +1,17 @@
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Wed, 10 Sep 2014 23:21:42 +0200
+Description: python-imaging is providing only pillow egg-info
+ Since pil egg-info is missing this patch is needed.  See also
+   https://lists.debian.org/debian-python/2014/09/msg00070.html
+
+--- a/setup.py
++++ b/setup.py
+@@ -16,7 +16,7 @@ import sys
+ requires = [
+     'matplotlib>=0.99, <=1.1.0',
+     'numpy>=1.2.1',
+-    'pil>=1.1.7',
++    'pillow>=2.5.1',
+     'pydicom>=0.9.5, <=0.9.9']
+ 
+ if sys.version_info[0] == 2 and sys.version_info[1] < 6:

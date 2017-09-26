@@ -9,8 +9,9 @@
 
 import os
 import wx
-from wx.xrc import *
-from wx.lib.pubsub import Publisher as pub
+from wx.xrc import XRCCTRL, XRCID, XmlResource
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 from dicompyler import guiutil, util
 
 try:
@@ -228,10 +229,10 @@ class PreferencesDialog(wx.Dialog):
                     c.SetValue(value)
                     sizer.Add(c, 0, wx.ALIGN_CENTER)
                     # Remove the label preceding the checkbox
-                    t = self.FindWindowById(c.PrevControlId(c.GetId()))
+                    t = c.GetPrevSibling()
                     t.SetLabel('')
                     # Adjust the sizer preceding the label
-                    fgsizer.GetItem(0).SetSpacer((20,0))
+                    fgsizer.GetItem(0).AssignSpacer((20,0))
                     # Add control to the callback dict
                     self.callbackdict[c] = setting['callback']
                     self.Bind(wx.EVT_CHECKBOX, self.OnUpdateCheckbox, c)
@@ -374,7 +375,8 @@ def main():
 
     import tempfile, os
     import wx
-    from wx.lib.pubsub import Publisher as pub
+    from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+    from wx.lib.pubsub import pub
 
     app = wx.App(False)
 

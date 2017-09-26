@@ -10,7 +10,8 @@
 import util
 import wx
 from wx.xrc import XmlResource, XRCCTRL, XRCID
-from wx.lib.pubsub import Publisher as pub
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 
 def IsMSWindows():
     """Are we running on Windows?
@@ -78,12 +79,12 @@ def convert_pil_to_wx(pil, alpha=True):
         Code taken from Dave Witten's imViewer-Simple.py in pydicom contrib."""
     if alpha:
         image = apply(wx.EmptyImage, pil.size)
-        image.SetData(pil.convert("RGB").tostring())
-        image.SetAlphaData(pil.convert("RGBA").tostring()[3::4])
+        image.SetData(pil.convert("RGB").tobytes())#Fixes commit github.com/python-pillow/Pillow/commit/71c95c8e5f3bba1845444a246d04646825e6bab3
+        image.SetAlphaData(pil.convert("RGBA").tobytes()[3::4])
     else:
         image = wx.EmptyImage(pil.size[0], pil.size[1])
         new_image = pil.convert('RGB')
-        data = new_image.tostring()
+        data = new_image.tobytes()
         image.SetData(data)
     return image
 

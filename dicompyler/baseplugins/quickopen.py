@@ -11,7 +11,8 @@
 import logging
 logger = logging.getLogger('dicompyler.quickimport')
 import wx
-from wx.lib.pubsub import Publisher as pub
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 from dicompyler import dicomparser, util
 import dicom
 

@@ -64,19 +64,25 @@ class DicomParser:
         return self.ds.SOPInstanceUID
 
     def GetStudyInfo(self):
-        """Return the study information of the current file."""
+        """Return the study information of the current file. Function from dicompyler-core commit 13e5265"""
 
         study = {}
         if 'StudyDescription' in self.ds:
-            desc=self.ds.StudyDescription
+            desc = self.ds.StudyDescription
         else:
-            desc='No description'
+            desc = 'No description'
         study['description'] = desc
+        if 'StudyDate' in self.ds:
+            date = self.ds.StudyDate
+        else:
+            date = None
+        study['date'] = date
         # Don't assume that every dataset includes a study UID
-        study['id'] = self.ds.SeriesInstanceUID
         if 'StudyInstanceUID' in self.ds:
             study['id'] = self.ds.StudyInstanceUID
-        
+        else:
+            study['id'] = str(random.randint(0, 65535))
+
         return study
 
     def GetSeriesInfo(self):

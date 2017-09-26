@@ -10,7 +10,8 @@
 
 import wx
 from wx.xrc import XmlResource, XRCCTRL, XRCID
-from wx.lib.pubsub import Publisher as pub
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 import os, threading
 from dicompyler import guiutil, util
 
@@ -332,3 +333,8 @@ class AnonymizeDialog(wx.Dialog):
             self.privatetags = False
 
         self.EndModal(wx.ID_OK)
+
+    def OnDestroy(self, evt):
+        """Unbind to all events before the plugin is destroyed."""
+        pub.unsubscribe(self.OnImportPrefsChange, 'general.dicom.import_location')
+        pub.unsubscribe(self.OnUpdatePatient, 'patient.updated.raw_data')

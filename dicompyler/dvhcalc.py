@@ -12,7 +12,11 @@ import logging
 logger = logging.getLogger('dicompyler.dvhcalc')
 import numpy as np
 import numpy.ma as ma
-import matplotlib.nxutils as nx
+import matplotlib
+if matplotlib.__version__ > '1.2':
+    from matplotlib.path import Path as mpl_Path
+else:
+    from matplotlib import nxutils as nx
 
 def get_dvh(structure, dose, limit=None, callback=None):
     """Get a calculated cumulative DVH along with the associated parameters."""
@@ -100,11 +104,17 @@ def calculate_dvh(structure, dose, limit=None, callback=None):
             else:
                 contour['inside'] = False
                 for point in contour['data']:
-                    if nx.pnpoly(point[0], point[1],
+                    if matplotlib.__version__ > '1.2':
+                        if mpl_Path(np.array(contours[largestIndex]['data'])).contains_point(point):
+                            contour['inside'] = True
+                            # Assume if one point is inside, all will be inside
+                            break
+                    else:
+                        if nx.pnpoly(point[0], point[1],
                                  np.array(contours[largestIndex]['data'])):
-                        contour['inside'] = True
-                        # Assume if one point is inside, all will be inside
-                        break
+                            contour['inside'] = True
+                            # Assume if one point is inside, all will be inside
+                            break
                 # If the contour is inside, subtract it from the total histogram
                 if contour['inside']:
                     hist -= h
@@ -161,7 +171,10 @@ def calculate_contour_areas(plane):
 def get_contour_mask(doselut, dosegridpoints, contour):
     """Get the mask for the contour with respect to the dose plane."""
 
-    grid = nx.points_inside_poly(dosegridpoints, contour)
+    if matplotlib.__version__ > '1.2':
+        grid = mpl_Path(contour).contains_points(dosegridpoints)
+    else:
+        grid = nx.points_inside_poly(dosegridpoints, contour)
     grid = grid.reshape((len(doselut[1]), len(doselut[0])))
 
     return grid

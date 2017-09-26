@@ -10,7 +10,8 @@
 
 import wx
 from wx.xrc import XmlResource, XRCCTRL, XRCID
-from wx.lib.pubsub import Publisher as pub
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 from matplotlib import _cntr as cntr
 from matplotlib import __version__ as mplversion
 import numpy as np
@@ -192,18 +193,18 @@ class plugin2DView(wx.Panel):
         self.Unbind(wx.EVT_RIGHT_DOWN)
         self.Unbind(wx.EVT_RIGHT_UP)
         self.Unbind(wx.EVT_MOTION)
-        pub.unsubscribe(self.OnKeyDown)
-        pub.unsubscribe(self.OnMouseWheel)
-        pub.unsubscribe(self.OnRefresh)
+        pub.unsubscribe(self.OnKeyDown, 'main.key_down')
+        pub.unsubscribe(self.OnMouseWheel, 'main.mousewheel')
+        pub.unsubscribe(self.OnRefresh, '2dview.refresh')
 
     def OnDestroy(self, evt):
         """Unbind to all events before the plugin is destroyed."""
 
-        pub.unsubscribe(self.OnUpdatePatient)
-        pub.unsubscribe(self.OnStructureCheck)
-        pub.unsubscribe(self.OnIsodoseCheck)
-        pub.unsubscribe(self.OnDrawingPrefsChange)
-        pub.unsubscribe(self.OnPluginLoaded)
+        pub.unsubscribe(self.OnUpdatePatient, 'patient.updated.parsed_data')
+        pub.unsubscribe(self.OnStructureCheck, 'structures.checked')
+        pub.unsubscribe(self.OnIsodoseCheck, 'isodoses.checked')
+        pub.unsubscribe(self.OnDrawingPrefsChange, '2dview.drawingprefs')
+        pub.unsubscribe(self.OnPluginLoaded, 'plugin.loaded.2dview')
         self.OnUnfocus()
 
     def OnStructureCheck(self, msg):

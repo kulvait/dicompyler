@@ -16,11 +16,12 @@ logger.setLevel(logging.DEBUG)
 import os, threading
 import sys, traceback
 import wx
-from wx.xrc import *
+from wx.xrc import XRCCTRL, XRCID, XmlResource
 import wx.lib.dialogs, webbrowser
 # Uncomment line to setup pubsub for frozen targets on wxPython 2.8.11 and above
 # from wx.lib.pubsub import setupv1
-from wx.lib.pubsub import Publisher as pub
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 from dicompyler import guiutil, util
 from dicompyler import dicomgui, dvhdata, dvhdoses, dvhcalc
 from dicompyler.dicomparser import DicomParser as dp
@@ -925,7 +926,7 @@ class MainFrame(wx.Frame):
 
 class dicompyler(wx.App):
     def OnInit(self):
-        wx.InitAllImageHandlers()
+        # no-op in wxPython2.8 and later: wx.InitAllImageHandlers()
         wx.GetApp().SetAppName("dicompyler")
 
         # Load the XRC file for our gui resources

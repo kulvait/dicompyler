@@ -1,0 +1,56 @@
+Author: Vojtěch Kulvait <kulvait@gmail.com>
+Last-Update: Mon Sep 18 15:00:00 CEST 2017
+Description: Adds to code redability and warnings when importing only used object from library
+
+Index: dicompyler/dicompyler/dicomgui.py
+===================================================================
+--- dicompyler.orig/dicompyler/dicomgui.py
++++ dicompyler/dicompyler/dicomgui.py
+@@ -14,7 +14,7 @@ import logging
+ logger = logging.getLogger('dicompyler.dicomgui')
+ import hashlib, os, threading
+ import wx
+-from wx.xrc import *
++from wx.xrc import XmlResource, XRCCTRL, XRCID
+ from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+ from wx.lib.pubsub import pub
+ import numpy as np
+Index: dicompyler/dicompyler/main.py
+===================================================================
+--- dicompyler.orig/dicompyler/main.py
++++ dicompyler/dicompyler/main.py
+@@ -16,7 +16,7 @@ logger.setLevel(logging.DEBUG)
+ import os, threading
+ import sys, traceback
+ import wx
+-from wx.xrc import *
++from wx.xrc import XRCCTRL, XRCID, XmlResource
+ import wx.lib.dialogs, webbrowser
+ # Uncomment line to setup pubsub for frozen targets on wxPython 2.8.11 and above
+ # from wx.lib.pubsub import setupv1
+Index: dicompyler/dicompyler/plugin.py
+===================================================================
+--- dicompyler.orig/dicompyler/plugin.py
++++ dicompyler/dicompyler/plugin.py
+@@ -11,7 +11,7 @@ import logging
+ logger = logging.getLogger('dicompyler.plugin')
+ import imp, os
+ import wx
+-from wx.xrc import *
++from wx.xrc import XRCCTRL, XRCID, XmlResource
+ from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+ from wx.lib.pubsub import pub
+ from dicompyler import guiutil, util
+Index: dicompyler/dicompyler/preferences.py
+===================================================================
+--- dicompyler.orig/dicompyler/preferences.py
++++ dicompyler/dicompyler/preferences.py
+@@ -9,7 +9,7 @@
+ 
+ import os
+ import wx
+-from wx.xrc import *
++from wx.xrc import XRCCTRL, XRCID, XmlResource
+ from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+ from wx.lib.pubsub import pub
+ from dicompyler import guiutil, util

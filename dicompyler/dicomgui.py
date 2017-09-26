@@ -14,8 +14,9 @@ import logging
 logger = logging.getLogger('dicompyler.dicomgui')
 import hashlib, os, threading
 import wx
-from wx.xrc import *
-from wx.lib.pubsub import Publisher as pub
+from wx.xrc import XmlResource, XRCCTRL, XRCID
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 import numpy as np
 from dicompyler import dicomparser, dvhdoses, guiutil, util
 
@@ -48,6 +49,8 @@ class DicomImporterDialog(wx.Dialog):
         pre = wx.PreDialog()
         # the Create step is done by XRC.
         self.PostCreate(pre)
+        self.path = "/tmp"
+        self.import_location_setting = "Remember Last Used"
 
     def Init(self, res):
         """Method called after the panel has been initialized."""

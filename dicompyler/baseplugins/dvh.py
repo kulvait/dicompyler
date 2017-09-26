@@ -12,7 +12,8 @@
 
 import wx
 from wx.xrc import XmlResource, XRCCTRL, XRCID
-from wx.lib.pubsub import Publisher as pub
+from wx.lib.pubsub import setuparg1 #see https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.setuparg1.html
+from wx.lib.pubsub import pub
 from dicompyler import guiutil, util
 from dicompyler import dvhdata, guidvh
 from dicompyler import wxmpl
@@ -132,9 +133,9 @@ class pluginDVH(wx.Panel):
     def OnDestroy(self, evt):
         """Unbind to all events before the plugin is destroyed."""
 
-        pub.unsubscribe(self.OnUpdatePatient)
-        pub.unsubscribe(self.OnStructureCheck)
-        pub.unsubscribe(self.OnStructureSelect)
+        pub.unsubscribe(self.OnUpdatePatient, 'patient.updated.parsed_data')
+        pub.unsubscribe(self.OnStructureCheck, 'structures.checked')
+        pub.unsubscribe(self.OnStructureSelect, 'structure.selected')
 
     def OnStructureCheck(self, msg):
         """When a structure changes, update the interface and plot."""

@@ -1,0 +1,28 @@
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Mon, 25 Aug 2014 10:08:49 +0200
+Bug-Debian: http://bugs.debian.org/759056
+Description: Apply wx-migration-tool which was developed by Olly Betts
+ http://anonscm.debian.org/cgit/collab-maint/wx-migration-tools.git
+
+--- a/dicompyler/main.py
++++ b/dicompyler/main.py
+@@ -925,7 +925,7 @@ class MainFrame(wx.Frame):
+ 
+ class dicompyler(wx.App):
+     def OnInit(self):
+-        wx.InitAllImageHandlers()
++        # no-op in wxPython2.8 and later: wx.InitAllImageHandlers()
+         wx.GetApp().SetAppName("dicompyler")
+ 
+         # Load the XRC file for our gui resources
+--- a/dicompyler/wxmpl.py
++++ b/dicompyler/wxmpl.py
+@@ -1422,7 +1422,7 @@ class PlotFrame(wx.Frame):
+         fileName = wx.FileSelector('Save Plot', default_extension='png',
+             wildcard=('Portable Network Graphics (*.png)|*.png|'
+                 + 'Encapsulated Postscript (*.eps)|*.eps|All files (*.*)|*.*'),
+-            parent=self, flags=wx.SAVE|wx.OVERWRITE_PROMPT)
++            parent=self, flags=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT)
+ 
+         if not fileName:
+             return

@@ -1,0 +1,25 @@
+Author: Vojtěch Kulvait <kulvait@gmail.com>
+Last-Update: Mon Sep 19 00:30:00 CEST 2017
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=854837
+Description: Added support for pillow >=3.0.0 addressing changes due to commit https://github.com/python-pillow/Pillow/commit/71c95c8e5f3bba1845444a246d04646825e6bab3, small indentation fix. 
+
+Index: dicompyler/dicompyler/guiutil.py
+===================================================================
+--- dicompyler.orig/dicompyler/guiutil.py
++++ dicompyler/dicompyler/guiutil.py
+@@ -79,12 +79,12 @@ def convert_pil_to_wx(pil, alpha=True):
+         Code taken from Dave Witten's imViewer-Simple.py in pydicom contrib."""
+     if alpha:
+         image = apply(wx.EmptyImage, pil.size)
+-        image.SetData(pil.convert("RGB").tostring())
+-        image.SetAlphaData(pil.convert("RGBA").tostring()[3::4])
++        image.SetData(pil.convert("RGB").tobytes())#Fixes commit github.com/python-pillow/Pillow/commit/71c95c8e5f3bba1845444a246d04646825e6bab3
++        image.SetAlphaData(pil.convert("RGBA").tobytes()[3::4])
+     else:
+         image = wx.EmptyImage(pil.size[0], pil.size[1])
+         new_image = pil.convert('RGB')
+-        data = new_image.tostring()
++        data = new_image.tobytes()
+         image.SetData(data)
+     return image
+ 

@@ -1,0 +1,34 @@
+Author: Vojtěch Kulvait <kulvait@gmail.com>
+Last-Update: Mon Sep 18 23:00:00 CEST 2017
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=854837
+Description: PrevControlId is no longer method of wx.Window, SetSpacer become AssignSpacer, wxDIALOG_MODAL is no longer valid identifier
+
+diff --git a/dicompyler/preferences.py b/dicompyler/preferences.py
+index 82ce7a3..7086af2 100755
+--- a/dicompyler/preferences.py
++++ b/dicompyler/preferences.py
+@@ -229,10 +229,10 @@ class PreferencesDialog(wx.Dialog):
+                     c.SetValue(value)
+                     sizer.Add(c, 0, wx.ALIGN_CENTER)
+                     # Remove the label preceding the checkbox
+-                    t = self.FindWindowById(c.PrevControlId(c.GetId()))
++                    t = c.GetPrevSibling()
+                     t.SetLabel('')
+                     # Adjust the sizer preceding the label
+-                    fgsizer.GetItem(0).SetSpacer((20,0))
++                    fgsizer.GetItem(0).AssignSpacer((20,0))
+                     # Add control to the callback dict
+                     self.callbackdict[c] = setting['callback']
+                     self.Bind(wx.EVT_CHECKBOX, self.OnUpdateCheckbox, c)
+--- a/dicompyler/resources/guiutil.xrc
++++ b/dicompyler/resources/guiutil.xrc
+@@ -70,6 +70,6 @@
+     </object>
+     <title>Loading...</title>
+     <centered>1</centered>
+-    <style>wxCAPTION|wxSTAY_ON_TOP|wxDIALOG_MODAL</style>
++    <style>wxCAPTION|wxSTAY_ON_TOP</style>
+   </object>
+ </resource>
+\ No newline at end of file
+

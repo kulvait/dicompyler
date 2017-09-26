@@ -1,0 +1,24 @@
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Wed, 10 Sep 2014 23:21:42 +0200
+Description: Hopefully dicompyler can also cope with the current
+ version of python-dicom.  This needs to be clarified with upstream
+ but for the moment we need the patch to let it start at all.
+
+--- dicompyler-0.4.2.orig/setup.py
++++ dicompyler-0.4.2/setup.py
+@@ -17,7 +17,7 @@
+     'matplotlib>=0.99, <=1.1.0',
+     'numpy>=1.2.1',
+     'pil>=1.1.7',
+-    'pydicom>=0.9.5, <0.9.7']
++    'pydicom>=0.9.5, <=0.9.9']
+ 
+ if sys.version_info[0] == 2 and sys.version_info[1] < 6:
+     requires.append('simplejson')
+@@ -91,4 +91,4 @@
+     - PIL 1.1.7 or any version of Pillow
+     - pydicom 0.9.5 or 0.9.6
+     - simplejson (only for Python 2.5, Python 2.6+ includes JSON support)""",
+-)
+\ No newline at end of file
++)
